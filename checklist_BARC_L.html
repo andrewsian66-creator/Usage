@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zulu Pre-Trade Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f5f0e8;
+    --gold: #b8932a;
+    --gold-light: #d4a843;
+    --red: #8b2635;
+    --green: #1e4d2b;
+    --amber: #8a6200;
+    --rule: #c8bfa8;
+    --mid: #6b6252;
+    --green-bg: #e8f2eb;
+    --amber-bg: #fdf3dc;
+    --red-bg: #f5e8ea;
+    --green-border: #4a9e6a;
+    --amber-border: #c89a20;
+    --red-border: #c04060;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #e8e2d6;
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.75;
+    padding: 40px 20px;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--paper);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+    padding: 60px 64px 80px;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+    padding: 28px 0 20px;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+  .masthead .label {
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 12px;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .masthead h1 em { font-style: italic; color: var(--gold); }
+  .masthead .deck {
+    font-size: 0.95rem;
+    color: var(--mid);
+    font-style: italic;
+    max-width: 520px;
+    margin: 8px auto 0;
+  }
+  .masthead .byline {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-top: 16px;
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+  }
+
+  /* STOCK DETAILS */
+  .stock-details {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 24px 32px;
+    margin-bottom: 40px;
+  }
+  .stock-details h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 16px;
+  }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .detail-field label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 4px;
+  }
+  .detail-field input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(245,240,232,0.3);
+    color: var(--paper);
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    padding: 4px 0;
+    outline: none;
+  }
+  .detail-field input::placeholder { color: rgba(245,240,232,0.25); }
+  .detail-field input:focus { border-bottom-color: var(--gold-light); }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 40px;
+    border: 1px solid var(--rule);
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(184,147,42,0.08);
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .section-header .leg-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .verdict-badge {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'Source Serif 4', serif;
+    padding: 4px 14px;
+    border-radius: 2px;
+    font-weight: 400;
+    transition: all 0.3s;
+  }
+  .verdict-badge.pending { background: rgba(107,98,82,0.15); color: var(--mid); }
+  .verdict-badge.green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .verdict-badge.amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+  .verdict-badge.red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+  .section-body { padding: 0; }
+
+  /* ROWS */
+  .check-row {
+    display: grid;
+    grid-template-columns: 1fr 200px 80px;
+    align-items: center;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(200,191,168,0.4);
+    gap: 16px;
+    transition: background 0.2s;
+  }
+  .check-row:last-child { border-bottom: none; }
+  .check-row:hover { background: rgba(184,147,42,0.04); }
+  .check-row.highlight { background: rgba(139,38,53,0.04); }
+
+  .row-label {
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+  .row-label .sub {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--mid);
+    font-style: italic;
+    margin-top: 2px;
+  }
+  .row-label .fchlabel {
+    display: inline-block;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--red);
+    color: white;
+    padding: 1px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .row-input select, .row-input input[type="number"], .row-input input[type="text"] {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.88rem;
+    padding: 6px 10px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .row-input select:focus, .row-input input:focus { border-color: var(--gold); }
+
+  .row-signal {
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--mid);
+    transition: all 0.3s;
+  }
+  .row-signal.green { color: var(--green); font-weight: 700; }
+  .row-signal.amber { color: var(--amber); font-weight: 700; }
+  .row-signal.red { color: var(--red); font-weight: 700; }
+
+  /* NOTES */
+  .notes-row {
+    padding: 12px 24px 16px;
+    border-bottom: 1px solid rgba(200,191,168,0.4);
+  }
+  .notes-row:last-child { border-bottom: none; }
+  .notes-row label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 6px;
+  }
+  .notes-row textarea {
+    width: 100%;
+    background: rgba(200,191,168,0.1);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    font-style: italic;
+    padding: 8px 12px;
+    outline: none;
+    resize: vertical;
+    min-height: 52px;
+    line-height: 1.6;
+  }
+  .notes-row textarea:focus { border-color: var(--gold); }
+
+  /* PULL QUOTE */
+  .pull {
+    border-left: 3px solid var(--gold);
+    margin: 0 24px 0;
+    padding: 8px 0 8px 20px;
+  }
+  .pull p {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+
+  /* FINAL VERDICT */
+  .final-verdict {
+    margin-top: 40px;
+    border: 2px solid var(--ink);
+  }
+  .final-verdict-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .final-verdict-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .final-verdict-body {
+    padding: 28px 32px;
+  }
+  .three-legs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .leg-box {
+    text-align: center;
+    padding: 16px;
+    border: 1px solid var(--rule);
+    transition: all 0.3s;
+  }
+  .leg-box .leg-name {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 8px;
+  }
+  .leg-box .leg-verdict {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--mid);
+    transition: all 0.3s;
+  }
+  .leg-box.green { background: var(--green-bg); border-color: var(--green-border); }
+  .leg-box.green .leg-verdict { color: var(--green); }
+  .leg-box.amber { background: var(--amber-bg); border-color: var(--amber-border); }
+  .leg-box.amber .leg-verdict { color: var(--amber); }
+  .leg-box.red { background: var(--red-bg); border-color: var(--red-border); }
+  .leg-box.red .leg-verdict { color: var(--red); }
+
+  .decision-box {
+    text-align: center;
+    padding: 24px;
+    border: 2px solid var(--rule);
+    transition: all 0.3s;
+  }
+  .decision-box .decision-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 8px;
+  }
+  .decision-box .decision-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--mid);
+    transition: all 0.3s;
+  }
+  .decision-box .decision-sub {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--mid);
+    margin-top: 6px;
+    transition: all 0.3s;
+  }
+  .decision-box.go { border-color: var(--green-border); background: var(--green-bg); }
+  .decision-box.go .decision-text { color: var(--green); }
+  .decision-box.caution { border-color: var(--amber-border); background: var(--amber-bg); }
+  .decision-box.caution .decision-text { color: var(--amber); }
+  .decision-box.stop { border-color: var(--red-border); background: var(--red-bg); }
+  .decision-box.stop .decision-text { color: var(--red); }
+
+  /* BENCHMARK */
+  .benchmark {
+    margin-top: 32px;
+    padding: 16px 24px;
+    background: rgba(184,147,42,0.07);
+    border: 1px solid rgba(184,147,42,0.3);
+    font-size: 0.82rem;
+    color: var(--mid);
+  }
+  .benchmark strong { color: var(--ink); }
+
+  /* PRINT BUTTON */
+  .print-bar {
+    margin-top: 32px;
+    text-align: center;
+  }
+  .print-btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: var(--gold); }
+
+  footer {
+    margin-top: 48px;
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+    text-align: center;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .page { box-shadow: none; padding: 20px; }
+    .print-bar { display: none; }
+  }
+
+  @media (max-width: 680px) {
+    .page { padding: 32px 24px; }
+    .detail-grid { grid-template-columns: 1fr 1fr; }
+    .check-row { grid-template-columns: 1fr 160px 60px; }
+    .three-legs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="masthead">
+<div class="label">Zulu Framework — Crumb of Comfort Portfolio</div>
+<h1>Pre-Trade <em>Checklist</em></h1>
+<div class="deck">Quants. Quals. Chart. All three legs must stand before capital moves.</div>
+<div class="byline">Complete every row honestly. If you cannot, the answer is wait.</div>
+</div>
+<div class="stock-details">
+<h2>Candidate Details</h2>
+<div class="detail-grid">
+<div class="detail-field">
+<label>Ticker</label>
+<input id="ticker" oninput="updateTitle()" placeholder="e.g. BARC" type="text" value="BARC.L"/>
+</div>
+<div class="detail-field">
+<label>Company</label>
+<input id="company" oninput="updateTitle()" placeholder="e.g. Barclays PLC" type="text" value="Barclays PLC"/>
+</div>
+<div class="detail-field">
+<label>Date</label>
+<input id="tradedate" placeholder="e.g. 03 Jun 2026" type="text" value="03 Jun 2026"/>
+</div>
+<div class="detail-field">
+<label>Price (p)</label>
+<input id="price" placeholder="e.g. 470" type="text" value="290.45"/>
+</div>
+</div>
+</div>
+<div class="section" id="section-quants">
+<div class="section-header">
+<div>
+<div class="leg-num">Leg One</div>
+<h2>Quants</h2>
+</div>
+<div class="verdict-badge pending" id="badge-quants">Pending</div>
+</div>
+<div class="section-body">
+<div class="check-row">
+<div class="row-label">
+          PEG Ratio — Primary Source
+          <span class="sub">Stockopedia preferred. Enter figure.</span>
+</div>
+<div class="row-input">
+<input id="peg1" oninput="evalPeg1()" placeholder="e.g. 0.79" step="0.01" type="number" value="0.72"/>
+</div>
+<div class="row-signal pending" id="sig-peg1">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          PEG Ratio — Secondary Source
+          <span class="sub">Simply Wall St or equivalent. Cross-reference.</span>
+</div>
+<div class="row-input">
+<input id="peg2" oninput="evalPeg2()" placeholder="e.g. 1.19" step="0.01" type="number"/>
+</div>
+<div class="row-signal pending" id="sig-peg2">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          EPS Growth
+          <span class="sub">Forward earnings growth trend.</span>
+</div>
+<div class="row-input">
+<select id="eps" onchange="evalEps()">
+<option value="">Select…</option>
+<option selected="selected" value="strong">Strong positive (&gt;15%)</option>
+<option value="positive">Positive (0–15%)</option>
+<option value="flat">Flat / uncertain</option>
+<option value="negative">Negative</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-eps">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Buyback Programme
+          <span class="sub">Type matters. Cancellation = gold standard.</span>
+</div>
+<div class="row-input">
+<select id="buyback" onchange="evalBuyback()">
+<option value="">Select…</option>
+<option value="cancellation">Cancellation — shares deleted</option>
+<option value="treasury">Treasury — shares held</option>
+<option value="none">None</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-buyback">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Market
+          <span class="sub">AIM requires documented exception. Main Market preferred.</span>
+</div>
+<div class="row-input">
+<select id="market" onchange="evalMarket()">
+<option value="">Select…</option>
+<option selected="selected" value="main">Main Market / FTSE</option>
+<option value="aim_exception">AIM — exception documented</option>
+<option value="aim">AIM — no exception</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-market">—</div>
+</div>
+<div class="notes-row">
+<label>Quants — Notes &amp; Source References</label>
+<textarea id="notes-quants" placeholder="Note sources, any discrepancies between data providers, and the basis for any borderline calls…"></textarea>
+</div>
+</div>
+</div>
+<div class="section" id="section-quals">
+<div class="section-header">
+<div>
+<div class="leg-num">Leg Two</div>
+<h2>Quals</h2>
+</div>
+<div class="verdict-badge pending" id="badge-quals">Pending</div>
+</div>
+<div class="section-body">
+<div class="check-row">
+<div class="row-label">
+          Moat Type
+          <span class="sub">Type 1 Data, Type 2 Switching, Type 3 Regulatory/IP, Type 4 Scale/Network.</span>
+</div>
+<div class="row-input">
+<select id="moat" onchange="evalMoat()">
+<option value="">Select…</option>
+<option value="strong">Strong identifiable moat</option>
+<option value="partial">Partial / emerging moat</option>
+<option value="none">No clear moat</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-moat">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Director Dealings
+          <span class="sub">Recent dealings. Context matters — options vs open market.</span>
+</div>
+<div class="row-input">
+<select id="directors" onchange="evalDirectors()">
+<option value="">Select…</option>
+<option value="buying">Buying — open market</option>
+<option value="neutral">Neutral / options only</option>
+<option value="selling_historic">Selling — historic, below current price</option>
+<option value="selling_current">Selling — at current levels</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-directors">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Skeleton Detector
+          <span class="sub">Treasury buybacks, insider sales, clumpy earnings, new narrative without numbers, geographic concentration, debt-funded expansion, goodwill risk.</span>
+</div>
+<div class="row-input">
+<select id="skeletons" onchange="evalSkeletons()">
+<option value="">Select…</option>
+<option value="none">None identified</option>
+<option value="minor">Minor — noted, not a veto</option>
+<option value="major">Major — potential veto</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-skeletons">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Revenue Smoothness
+          <span class="sub">Anti-lumpiness mandate. Large predictable order books preferred over binary contract wins.</span>
+</div>
+<div class="row-input">
+<select id="smoothness" onchange="evalSmoothness()">
+<option value="">Select…</option>
+<option value="smooth">Smooth — diversified, recurring</option>
+<option value="mixed">Mixed — some concentration</option>
+<option value="lumpy">Lumpy — binary or single-contract risk</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-smoothness">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Goodwill on Balance Sheet
+          <span class="sub">Large goodwill relative to operating profit = latent PEG corruption risk. New skeleton flag — June 2026.</span>
+</div>
+<div class="row-input">
+<select id="goodwill" onchange="evalGoodwill()">
+<option value="">Select…</option>
+<option value="low">Low / negligible</option>
+<option selected="selected" value="moderate">Moderate — noted</option>
+<option value="high">High relative to operating profit</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-goodwill">—</div>
+</div>
+<div class="notes-row">
+<label>Quals — Notes &amp; Thesis Summary</label>
+<textarea id="notes-quals" placeholder="Describe the moat, name any skeletons and your assessment of them, note the investment thesis in plain terms…"></textarea>
+</div>
+</div>
+</div>
+<div class="section" id="section-chart">
+<div class="section-header">
+<div>
+<div class="leg-num">Leg Three</div>
+<h2>Chart</h2>
+</div>
+<div class="verdict-badge pending" id="badge-chart">Pending</div>
+</div>
+<div class="section-body">
+<div class="check-row">
+<div class="row-label">
+          MA Regime
+          <span class="sub">50-day vs 200-day moving average relationship.</span>
+</div>
+<div class="row-input">
+<select id="regime" onchange="evalRegime()">
+<option value="">Select…</option>
+<option selected="selected" value="golden">Golden Cross confirmed</option>
+<option value="near_golden">Near-golden — cross imminent</option>
+<option value="death">Death Cross — but fundamentally strong (bear trap screen)</option>
+<option value="no_cross">No cross — extended period</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-regime">—</div>
+</div>
+<div class="check-row highlight">
+<div class="row-label">
+          MA Direction <span class="fchlabel">FCH Rule</span>
+<span class="sub">Is the 50-day SMA approaching the 200-day from BELOW (cross imminent — valid) or declining from ABOVE (cross expiring — not valid)?</span>
+</div>
+<div class="row-input">
+<select id="madirection" onchange="evalMADirection()">
+<option value="">Select…</option>
+<option value="approaching">Approaching from BELOW — cross building ✓</option>
+<option selected="selected" value="widening">Golden cross widening — momentum intact ✓</option>
+<option value="declining">Declining from ABOVE — cross expiring ✗</option>
+<option value="neutral">Neutral / converging — unclear</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-madirection">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Cross Age
+          <span class="sub">Days since golden cross fired. Aged 30–90 days on strong fundamentals = sweet spot.</span>
+</div>
+<div class="row-input">
+<select id="crossage" onchange="evalCrossAge()">
+<option value="">Select…</option>
+<option value="fresh">Fresh — under 30 days</option>
+<option selected="selected" value="aged">Aged — 30 to 90 days (sweet spot)</option>
+<option value="old">Old — over 90 days, MA direction check critical</option>
+<option value="na">Not applicable</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-crossage">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Price vs Moving Averages
+          <span class="sub">Where is the price relative to both MAs?</span>
+</div>
+<div class="row-input">
+<select id="pricevsma" onchange="evalPriceVsMA()">
+<option value="">Select…</option>
+<option selected="selected" value="above_both">Above both MAs — strong</option>
+<option value="between">Between the two MAs</option>
+<option value="below_50">Below 50-day, above 200-day</option>
+<option value="below_both">Below both MAs</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-pricevsma">—</div>
+</div>
+<div class="check-row">
+<div class="row-label">
+          Volume Profile on Recovery
+          <span class="sub">High volume green candles + low volume red candles = institutional accumulation signal.</span>
+</div>
+<div class="row-input">
+<select id="volume" onchange="evalVolume()">
+<option value="">Select…</option>
+<option selected="selected" value="accumulation">Accumulation pattern — high volume greens</option>
+<option value="neutral">Neutral / inconclusive</option>
+<option value="distribution">Distribution pattern — high volume reds</option>
+</select>
+</div>
+<div class="row-signal pending" id="sig-volume">—</div>
+</div>
+<div class="notes-row">
+<label>Chart — Notes &amp; Technical Observations</label>
+<textarea id="notes-chart" placeholder="Describe the MA picture, note the cross date if known, describe candle patterns and any support/resistance levels observed…"></textarea>
+</div>
+</div>
+</div>
+<div class="final-verdict">
+<div class="final-verdict-header">
+<h2>The Verdict</h2>
+<div style="font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(245,240,232,0.5);">All three legs required</div>
+</div>
+<div class="final-verdict-body">
+<div class="three-legs">
+<div class="leg-box" id="legbox-quants">
+<div class="leg-name">Leg One — Quants</div>
+<div class="leg-verdict" id="legtext-quants">—</div>
+</div>
+<div class="leg-box" id="legbox-quals">
+<div class="leg-name">Leg Two — Quals</div>
+<div class="leg-verdict" id="legtext-quals">—</div>
+</div>
+<div class="leg-box" id="legbox-chart">
+<div class="leg-name">Leg Three — Chart</div>
+<div class="leg-verdict" id="legtext-chart">—</div>
+</div>
+</div>
+<div class="decision-box" id="decision-box">
+<div class="decision-label">Decision</div>
+<div class="decision-text" id="decision-text">Awaiting input</div>
+<div class="decision-sub" id="decision-sub">Complete all sections above.</div>
+</div>
+<div class="benchmark">
+<strong>Benchmark — POLR (April 2026):</strong> PEG 0.79 · Golden cross confirmed · 50-day 630p cleanly above 200-day 582p · MA widening · AuM +43% · Cancellation buyback · Director selling historic only. Result: +27.3% in 40 days. This is the standard.
+      </div>
+<div class="notes-row" style="padding: 16px 0 0;">
+<label>Final Notes — Thesis Statement &amp; Weak Legs</label>
+<textarea id="notes-final" placeholder="State the investment thesis in one sentence. Name any weak legs and why you are proceeding despite them. If you cannot justify the weak leg, do not proceed." style="min-height:80px;"></textarea>
+</div>
+</div>
+</div>
+<div class="print-bar">
+<button class="print-btn" onclick="window.print()">Print / Save Record</button>
+</div>
+<footer>
+    Zulu Pre-Trade Checklist  ·  Crumb of Comfort Portfolio  ·  Built June 2026
+  </footer>
+</div>
+<script>
+  // State
+  const state = {
+    peg1: null, peg2: null, eps: null, buyback: null, market: null,
+    moat: null, directors: null, skeletons: null, smoothness: null, goodwill: null,
+    regime: null, madirection: null, crossage: null, pricevsma: null, volume: null
+  };
+
+  function setSignal(id, level, text) {
+    const el = document.getElementById(id);
+    el.className = 'row-signal ' + level;
+    el.textContent = text;
+  }
+
+  function setBadge(id, level, text) {
+    const el = document.getElementById(id);
+    el.className = 'verdict-badge ' + level;
+    el.textContent = text;
+  }
+
+  // PEG evaluation
+  function evalPeg1() {
+    const v = parseFloat(document.getElementById('peg1').value);
+    state.peg1 = isNaN(v) ? null : v;
+    if (state.peg1 === null) { setSignal('sig-peg1','pending','—'); }
+    else if (state.peg1 < 1.0) { setSignal('sig-peg1','green','Green'); }
+    else if (state.peg1 <= 1.5) { setSignal('sig-peg1','amber','Amber'); }
+    else { setSignal('sig-peg1','red','Red'); }
+    updateQuants();
+  }
+  function evalPeg2() {
+    const v = parseFloat(document.getElementById('peg2').value);
+    state.peg2 = isNaN(v) ? null : v;
+    if (state.peg2 === null) { setSignal('sig-peg2','pending','—'); }
+    else if (state.peg2 < 1.0) { setSignal('sig-peg2','green','Green'); }
+    else if (state.peg2 <= 1.5) { setSignal('sig-peg2','amber','Amber'); }
+    else { setSignal('sig-peg2','red','Red'); }
+    updateQuants();
+  }
+  function evalEps() {
+    state.eps = document.getElementById('eps').value;
+    const map = { strong:'green', positive:'green', flat:'amber', negative:'red' };
+    const txt = { strong:'Green', positive:'Green', flat:'Amber', negative:'Red' };
+    if (!state.eps) { setSignal('sig-eps','pending','—'); }
+    else { setSignal('sig-eps', map[state.eps], txt[state.eps]); }
+    updateQuants();
+  }
+  function evalBuyback() {
+    state.buyback = document.getElementById('buyback').value;
+    const map = { cancellation:'green', treasury:'amber', none:'amber' };
+    const txt = { cancellation:'Green', treasury:'Amber', none:'Amber' };
+    if (!state.buyback) { setSignal('sig-buyback','pending','—'); }
+    else { setSignal('sig-buyback', map[state.buyback], txt[state.buyback]); }
+    updateQuants();
+  }
+  function evalMarket() {
+    state.market = document.getElementById('market').value;
+    const map = { main:'green', aim_exception:'amber', aim:'red' };
+    const txt = { main:'Green', aim_exception:'Amber', aim:'Red' };
+    if (!state.market) { setSignal('sig-market','pending','—'); }
+    else { setSignal('sig-market', map[state.market], txt[state.market]); }
+    updateQuants();
+  }
+
+  function updateQuants() {
+    const fields = [state.peg1, state.peg2, state.eps, state.buyback, state.market];
+    if (fields.some(f => f === null || f === '')) { setBadge('badge-quants','pending','Pending'); updateVerdict(); return; }
+    // Score
+    let score = 0, reds = 0;
+    // PEG — use worst of two sources
+    const worstPeg = Math.max(state.peg1 || 999, state.peg2 || 999);
+    if (worstPeg < 1.0) score += 2;
+    else if (worstPeg <= 1.5) score += 1;
+    else reds++;
+    // EPS
+    if (state.eps === 'strong') score += 2;
+    else if (state.eps === 'positive') score += 1;
+    else if (state.eps === 'negative') reds++;
+    // Buyback
+    if (state.buyback === 'cancellation') score += 1;
+    // Market
+    if (state.market === 'aim') reds++;
+
+    if (reds > 0) { setBadge('badge-quants','red','Red'); state._quants = 'red'; }
+    else if (score >= 4) { setBadge('badge-quants','green','Green'); state._quants = 'green'; }
+    else { setBadge('badge-quants','amber','Amber'); state._quants = 'amber'; }
+    updateVerdict();
+  }
+
+  function evalMoat() {
+    state.moat = document.getElementById('moat').value;
+    const map = { strong:'green', partial:'amber', none:'red' };
+    const txt = { strong:'Green', partial:'Amber', none:'Red' };
+    if (!state.moat) { setSignal('sig-moat','pending','—'); }
+    else { setSignal('sig-moat', map[state.moat], txt[state.moat]); }
+    updateQuals();
+  }
+  function evalDirectors() {
+    state.directors = document.getElementById('directors').value;
+    const map = { buying:'green', neutral:'green', selling_historic:'amber', selling_current:'red' };
+    const txt = { buying:'Green', neutral:'Green', selling_historic:'Amber', selling_current:'Red' };
+    if (!state.directors) { setSignal('sig-directors','pending','—'); }
+    else { setSignal('sig-directors', map[state.directors], txt[state.directors]); }
+    updateQuals();
+  }
+  function evalSkeletons() {
+    state.skeletons = document.getElementById('skeletons').value;
+    const map = { none:'green', minor:'amber', major:'red' };
+    const txt = { none:'Green', minor:'Amber', major:'Red' };
+    if (!state.skeletons) { setSignal('sig-skeletons','pending','—'); }
+    else { setSignal('sig-skeletons', map[state.skeletons], txt[state.skeletons]); }
+    updateQuals();
+  }
+  function evalSmoothness() {
+    state.smoothness = document.getElementById('smoothness').value;
+    const map = { smooth:'green', mixed:'amber', lumpy:'red' };
+    const txt = { smooth:'Green', mixed:'Amber', lumpy:'Red' };
+    if (!state.smoothness) { setSignal('sig-smoothness','pending','—'); }
+    else { setSignal('sig-smoothness', map[state.smoothness], txt[state.smoothness]); }
+    updateQuals();
+  }
+  function evalGoodwill() {
+    state.goodwill = document.getElementById('goodwill').value;
+    const map = { low:'green', moderate:'amber', high:'red' };
+    const txt = { low:'Green', moderate:'Amber', high:'Red' };
+    if (!state.goodwill) { setSignal('sig-goodwill','pending','—'); }
+    else { setSignal('sig-goodwill', map[state.goodwill], txt[state.goodwill]); }
+    updateQuals();
+  }
+
+  function updateQuals() {
+    const fields = [state.moat, state.directors, state.skeletons, state.smoothness, state.goodwill];
+    if (fields.some(f => !f)) { setBadge('badge-quals','pending','Pending'); updateVerdict(); return; }
+    let reds = 0, ambers = 0;
+    [state.moat, state.skeletons, state.smoothness, state.goodwill].forEach(f => {
+      if (['none','major','lumpy','high'].includes(f)) reds++;
+      else if (['partial','minor','mixed','moderate'].includes(f)) ambers++;
+    });
+    if (['selling_current'].includes(state.directors)) reds++;
+    else if (['selling_historic'].includes(state.directors)) ambers++;
+
+    if (reds > 0) { setBadge('badge-quals','red','Red'); state._quals = 'red'; }
+    else if (ambers > 1) { setBadge('badge-quals','amber','Amber'); state._quals = 'amber'; }
+    else if (ambers === 1) { setBadge('badge-quals','amber','Amber'); state._quals = 'amber'; }
+    else { setBadge('badge-quals','green','Green'); state._quals = 'green'; }
+    updateVerdict();
+  }
+
+  function evalRegime() {
+    state.regime = document.getElementById('regime').value;
+    const map = { golden:'green', near_golden:'green', death:'amber', no_cross:'amber' };
+    const txt = { golden:'Green', near_golden:'Green', death:'Amber', no_cross:'Amber' };
+    if (!state.regime) { setSignal('sig-regime','pending','—'); }
+    else { setSignal('sig-regime', map[state.regime], txt[state.regime]); }
+    updateChart();
+  }
+  function evalMADirection() {
+    state.madirection = document.getElementById('madirection').value;
+    const map = { approaching:'green', widening:'green', declining:'red', neutral:'amber' };
+    const txt = { approaching:'Green', widening:'Green', declining:'Red', neutral:'Amber' };
+    if (!state.madirection) { setSignal('sig-madirection','pending','—'); }
+    else { setSignal('sig-madirection', map[state.madirection], txt[state.madirection]); }
+    updateChart();
+  }
+  function evalCrossAge() {
+    state.crossage = document.getElementById('crossage').value;
+    const map = { fresh:'green', aged:'green', old:'amber', na:'amber' };
+    const txt = { fresh:'Green', aged:'Green', old:'Amber', na:'N/A' };
+    if (!state.crossage) { setSignal('sig-crossage','pending','—'); }
+    else { setSignal('sig-crossage', map[state.crossage], txt[state.crossage]); }
+    updateChart();
+  }
+  function evalPriceVsMA() {
+    state.pricevsma = document.getElementById('pricevsma').value;
+    const map = { above_both:'green', between:'amber', below_50:'amber', below_both:'red' };
+    const txt = { above_both:'Green', between:'Amber', below_50:'Amber', below_both:'Red' };
+    if (!state.pricevsma) { setSignal('sig-pricevsma','pending','—'); }
+    else { setSignal('sig-pricevsma', map[state.pricevsma], txt[state.pricevsma]); }
+    updateChart();
+  }
+  function evalVolume() {
+    state.volume = document.getElementById('volume').value;
+    const map = { accumulation:'green', neutral:'amber', distribution:'red' };
+    const txt = { accumulation:'Green', neutral:'Amber', distribution:'Red' };
+    if (!state.volume) { setSignal('sig-volume','pending','—'); }
+    else { setSignal('sig-volume', map[state.volume], txt[state.volume]); }
+    updateChart();
+  }
+
+  function updateChart() {
+    const fields = [state.regime, state.madirection, state.crossage, state.pricevsma, state.volume];
+    if (fields.some(f => !f)) { setBadge('badge-chart','pending','Pending'); updateVerdict(); return; }
+
+    // FCH rule: declining MA direction is automatic red
+    if (state.madirection === 'declining') {
+      setBadge('badge-chart','red','Red'); state._chart = 'red'; updateVerdict(); return;
+    }
+
+    let reds = 0, ambers = 0;
+    if (state.pricevsma === 'below_both') reds++;
+    if (state.volume === 'distribution') reds++;
+    if (['between','below_50'].includes(state.pricevsma)) ambers++;
+    if (state.crossage === 'old') ambers++;
+    if (state.regime === 'death' || state.regime === 'no_cross') ambers++;
+    if (state.madirection === 'neutral') ambers++;
+    if (state.volume === 'neutral') ambers++;
+
+    if (reds > 0) { setBadge('badge-chart','red','Red'); state._chart = 'red'; }
+    else if (ambers >= 2) { setBadge('badge-chart','amber','Amber'); state._chart = 'amber'; }
+    else { setBadge('badge-chart','green','Green'); state._chart = 'green'; }
+    updateVerdict();
+  }
+
+  function updateVerdict() {
+    const legs = [state._quants, state._quals, state._chart];
+    const legNames = ['Quants', 'Quals', 'Chart'];
+
+    // Update leg boxes
+    ['quants','quals','chart'].forEach((leg, i) => {
+      const box = document.getElementById('legbox-' + leg);
+      const txt = document.getElementById('legtext-' + leg);
+      const val = legs[i];
+      box.className = 'leg-box' + (val ? ' ' + val : '');
+      txt.textContent = val ? val.charAt(0).toUpperCase() + val.slice(1) : '—';
+    });
+
+    const decision = document.getElementById('decision-box');
+    const dtext = document.getElementById('decision-text');
+    const dsub = document.getElementById('decision-sub');
+
+    if (legs.some(l => !l)) {
+      decision.className = 'decision-box';
+      dtext.textContent = 'Awaiting input';
+      dsub.textContent = 'Complete all sections above.';
+      return;
+    }
+
+    if (legs.some(l => l === 'red')) {
+      decision.className = 'decision-box stop';
+      dtext.textContent = 'Do Not Proceed';
+      dsub.textContent = 'One or more legs are red. Hold capital. Review the failing leg before reconsidering.';
+    } else if (legs.some(l => l === 'amber')) {
+      decision.className = 'decision-box caution';
+      dtext.textContent = 'Proceed with Caution';
+      dsub.textContent = 'Amber legs present. Document the weak leg. Reduce position size. Is the thesis compelling enough to justify it?';
+    } else {
+      decision.className = 'decision-box go';
+      dtext.textContent = 'All Three Legs — Go';
+      dsub.textContent = 'Quants, quals and chart all confirm. Deploy capital at consistent position size (~£500). No special treatment.';
+    }
+  }
+
+  function updateTitle() {
+    const ticker = document.getElementById('ticker').value;
+    const company = document.getElementById('company').value;
+    if (ticker || company) {
+      document.title = 'Zulu Checklist — ' + (ticker || '') + (ticker && company ? ' · ' : '') + (company || '');
+    }
+  }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  [evalPeg1, evalPeg2, evalEps, evalBuyback, evalMarket,
+   evalMoat, evalDirectors, evalSkeletons, evalSmoothness, evalGoodwill,
+   evalRegime, evalMADirection, evalCrossAge, evalPriceVsMA, evalVolume,
+   updateTitle].forEach(function (fn) { try { fn(); } catch (e) {} });
+});
+</script></body>
+</html>
