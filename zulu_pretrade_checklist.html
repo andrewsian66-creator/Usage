@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zulu Pre-Trade Checklist</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef0f4;
+            color: #1e293b;
+            padding: 24px 20px;
+            line-height: 1.5;
+        }
+
+        .container { max-width: 980px; margin: 0 auto; }
+
+        /* ── Header ── */
+        .checklist-header {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b2a3b 60%, #0f3460 100%);
+            color: #fff;
+            padding: 28px 36px;
+            border-radius: 14px;
+            margin-bottom: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 28px rgba(13,27,42,0.35);
+        }
+        .checklist-header h1 { font-size: 1.65rem; font-weight: 700; letter-spacing: -0.3px; }
+        .checklist-header .subtitle { opacity: 0.65; font-size: 0.85rem; margin-top: 4px; }
+        .ticker-badge {
+            background: rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(255,255,255,0.28);
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        /* ── Section Cards ── */
+        .section-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 22px 28px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        .section-badge {
+            background: #0f3460;
+            color: #fff;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.72rem; font-weight: 700; flex-shrink: 0;
+        }
+        .section-title h2 { font-size: 1rem; font-weight: 700; color: #0d1b2a; }
+        .badge {
+            font-size: 0.68rem; padding: 2px 9px; border-radius: 12px;
+            font-weight: 700; letter-spacing: 0.3px;
+        }
+        .badge-auto  { background: #dcfce7; color: #166534; }
+        .badge-manual{ background: #fff7ed; color: #9a3412; }
+
+        /* ── Field Grid ── */
+        .field-group     { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+        .field-group.c3  { grid-template-columns: repeat(3,1fr); }
+        .field-group.c4  { grid-template-columns: repeat(4,1fr); }
+        .field { display: flex; flex-direction: column; gap: 5px; }
+        .field.span-full { grid-column: 1 / -1; }
+
+        label {
+            font-size: 0.72rem; font-weight: 700;
+            color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        input[type="text"], select, textarea {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 0.88rem;
+            color: #1e293b;
+            background: #f8fafc;
+            width: 100%;
+            transition: border-color 0.18s, box-shadow 0.18s;
+            font-family: inherit;
+        }
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0f3460;
+            box-shadow: 0 0 0 3px rgba(15,52,96,0.1);
+            background: #fff;
+        }
+        textarea { resize: vertical; min-height: 76px; }
+
+        /* Auto-filled inputs get a tinted look */
+        .auto-filled {
+            background: #eff6ff !important;
+            border-color: #93c5fd !important;
+            color: #1d4ed8 !important;
+            font-weight: 600 !important;
+        }
+
+        /* ── Signal pills ── */
+        .signal-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #f8fafc; border: 1.5px solid #e2e8f0;
+            border-radius: 20px; padding: 5px 14px;
+            font-size: 0.80rem; font-weight: 500;
+        }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; }
+
+        /* ── Divider ── */
+        .divider { height: 1px; background: #f1f5f9; margin: 16px 0; }
+
+        /* ── Footer ── */
+        .footer {
+            background: #fff; border-radius: 12px; padding: 20px 28px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-note { font-size: 0.75rem; color: #94a3b8; }
+        .btn-print {
+            background: #0f3460; color: #fff; border: none;
+            padding: 11px 26px; border-radius: 8px; font-size: 0.88rem;
+            font-weight: 600; cursor: pointer; transition: background 0.2s;
+        }
+        .btn-print:hover { background: #0d1b2a; }
+
+        @media print {
+            body { background: #fff; padding: 0; }
+            .btn-print { display: none; }
+            .section-card, .checklist-header, .footer { box-shadow: none; }
+        }
+        @media (max-width: 680px) {
+            .checklist-header { flex-direction: column; gap: 14px; }
+            .field-group, .field-group.c3, .field-group.c4 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ── HEADER ── -->
+    <div class="checklist-header">
+        <div>
+            <h1>Zulu Pre-Trade Checklist</h1>
+            <div class="subtitle">Multi-Leg Stock Analysis Framework</div>
+        </div>
+        <div class="ticker-badge" id="header-ticker">—</div>
+    </div>
+
+    <!-- ── CANDIDATE DETAILS ── -->
+    <div class="section-card">
+        <div class="section-title">
+            <div class="section-badge">★</div>
+            <h2>Candidate Details</h2>
+            <span class="badge badge-auto">AUTO-FILLED</span>
+        </div>
+        <div class="field-group c4">
+            <div class="field">
+                <label>Ticker Symbol</label>
+                <input type="text" id="ticker" value="">
+            </div>
+            <div class="field">
+                <label>Company Name</label>
+                <input type="text" id="company-name" value="">
+            </div>
+            <div class="field">
+                <label>Date</label>
+                <input type="text" id="date" value="">
+            </div>
+            <div class="field">
+                <label>Current Price</label>
+                <input type="text" id="current-price" value="">
+            </div>
+            <div class="field">
+                <label>Currency</label>
+                <input type="text" id="currency" value="">
+            </div>
+            <div class="field">
+                <label>Market Cap</label>
+                <input type="text" id="market-cap" value="">
+            </div>
+            <div class="field">
+                <label>Sector</label>
+                <input type="text" id="sector" value="">
+            </div>
+            <div class="field">
+                <label>Industry</label>
+                <input type="text" id="industry" value="">
+            </div>
+        </div>
+    </div>
+
+    <!-- ── LEG 1 · MARKET CHECK ── -->
+    <div class="section-card">
+        <div class="section-title">
+            <div class="section-badge">1</div>
+            <h2>Market Check</h2>
+            <span class="badge badge-auto">AUTO-FILLED</span>
+        </div>
+        <div class="field-group c4">
+            <div class="field">
+                <label>Market / Exchange</label>
+                <select id="market">
+                    <option value="">Select...</option>
+                    <option value="main-market">Main Market / FTSE</option>
+                    <option value="aim">AIM</option>
+                    <option value="other">Other / International</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>52-Week High</label>
+                <input type="text" id="week-52-high" value="">
+            </div>
+            <div class="field">
+                <label>52-Week Low</label>
+                <input type="text" id="week-52-low" value="">
+            </div>
+            <div class="field">
+                <label>Price vs 52-Wk High</label>
+                <input type="text" id="price-vs-high-pct" value="">
+            </div>
+        </div>
+    </div>
+
+    <!-- ── LEG 2 · CHART LEG ── -->
+    <div class="section-card">
+        <div class="section-title">
+            <div class="section-badge">2</div>
+            <h2>Chart Leg — Technical Analysis</h2>
+            <span class="badge badge-auto">AUTO-FILLED</span>
+        </div>
+        <div class="field-group c4">
+            <div class="field">
+                <label>50-Day SMA</label>
+                <input type="text" id="sma-50" value="">
+            </div>
+            <div class="field">
+                <label>200-Day SMA</label>
+                <input type="text" id="sma-200" value="">
+            </div>
+            <div class="field">
+                <label>Golden Cross?</label>
+                <select id="golden-cross">
+                    <option value="">Select...</option>
+                    <option value="yes">Yes — 50 above 200</option>
+                    <option value="no">No — Death Cross / Below</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Cross Age</label>
+                <input type="text" id="cross-age" value="">
+            </div>
+            <div class="field">
+                <label>50-Day Trend vs 200-Day</label>
+                <select id="ma-trend">
+                    <option value="">Select...</option>
+                    <option value="widening">Widening (Bullish)</option>
+                    <option value="approaching">Approaching</option>
+                    <option value="declining">Declining (Bearish)</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Price vs 50-Day MA</label>
+                <select id="price-vs-50ma">
+                    <option value="">Select...</option>
+                    <option value="above">Above</option>
+                    <option value="below">Below</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Price vs 200-Day MA</label>
+                <select id="price-vs-200ma">
+                    <option value="">Select...</option>
+                    <option value="above">Above</option>
+                    <option value="below">Below</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── LEG 3 · VOLUME PROFILE ── -->
+    <div class="section-card">
+        <div class="section-title">
+            <div class="section-badge">3</div>
+            <h2>Volume Profile — Accumulation / Distribution</h2>
+            <span class="badge badge-auto">AUTO-FILLED</span>
+        </div>
+        <div class="field-group c3">
+            <div class="field">
+                <label>Volume Signal (30-Day)</label>
+                <select id="volume-signal">
+                    <option value="">Select...</option>
+                    <option value="accumulation">Accumulation (Green &gt; Red vol)</option>
+                    <option value="distribution">Distribution (Red &gt; Green vol)</option>
+                    <option value="neutral">Neutral</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Avg Green-Day Volume</label>
+                <input type="text" id="avg-green-volume" value="">
+            </div>
+            <div class="field">
+                <label>Avg Red-Day Volume</label>
+                <input type="text" id="avg-red-volume" value="">
+            </div>
+        </div>
+    </div>
+
+    <!-- ── LEG 4 · QUANTS LEG ── -->
+    <div class="section-card">
+        <div class="section-title">
+            <div class="section-badge">4</div>
+            <h2>Quants Leg — Fundamentals</h2>
+            <span class="badge badge-auto">AUTO-FILLED</span>
+        </div>
+        <div class="field-group c4">
+            <div class="field">
+                <label>PEG Ratio</label>
+                <input type="text" id="peg-ratio" value="">
+            </div>
+            <div class="field">
+                <label>P/E Ratio (Trailing)</label>
+                <input type="text" id="pe-ratio" value="">
+            </div>
+            <div class="field">
+                <label>Forward P/E</label>
+                <input type="text" id="forward-pe" value="">
+            </div>
+            <div class="field">
+                <label>EPS (Trailing)</label>
+                <input type="text" id="eps-trailing" value="">
+            </div>
+            <div class="field">
+                <label>EPS (Forward)</label>
+                <input type="text" id="eps-forward" value="">
+            </div>
+            <div class="field">
+                <label>EPS Growth (Fwd vs Trail)</label>
+                <input type="text" id="eps-growth" value="">
+            </div>
+            <div class="field">
+                <label>Revenue Growth (YoY)</label>
+                <input type="text" id="revenue-growth" value="">
+            </div>
+            <div class="field">
+                <label>Return on Equity (ROE)</label>
+                <input type="text" id="roe" value="">
+            </div>
+            <div class="field">
+                <label>Debt / Equity</label>
+                <input type="text" id="debt-to-equity" value="">
+            </div>
+            <div class="field">
+                <label>Dividend Yield</label>
+                <input type="text" id="dividend-yield" value="">
+            </div>
+        </div>
+        <div class="divider"></div>
+        <p style="font-size:0.78rem;color:#94a3b8;font-style:italic;">
+            Stockopedia / Simply Wall St scores require a paid subscription — add them manually in the notes below.
+        </p>
+    </div>
+
+    <!-- ── LEG 5 · QUALITATIVE (MANUAL) ── -->
+    <div class="section-card">
+        <div class="section-title">
+            <div class="section-badge">5</div>
+            <h2>Qualitative Assessment</h2>
+            <span class="badge badge-manual">MANUAL</span>
+        </div>
+        <div class="field-group c3">
+            <div class="field">
+                <label>Moat Type</label>
+                <select id="moat-type">
+                    <option value="">Select...</option>
+                    <option value="wide">Wide Moat</option>
+                    <option value="narrow">Narrow Moat</option>
+                    <option value="none">No Moat</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Director Dealings</label>
+                <select id="director-dealings">
+                    <option value="">Select...</option>
+                    <option value="buying">Buying (Bullish)</option>
+                    <option value="selling">Selling (Bearish)</option>
+                    <option value="neutral">Neutral / None</option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Overall Rating</label>
+                <select id="overall-rating">
+                    <option value="">Select...</option>
+                    <option value="strong-buy">Strong Buy</option>
+                    <option value="buy">Buy</option>
+                    <option value="watch">Watch List</option>
+                    <option value="avoid">Avoid</option>
+                </select>
+            </div>
+            <div class="field span-full">
+                <label>Skeletons / Red Flags</label>
+                <textarea id="skeletons" placeholder="List any concerns: accounting issues, regulatory risks, weak balance sheet, high debt..."></textarea>
+            </div>
+            <div class="field span-full">
+                <label>Investment Catalyst</label>
+                <textarea id="catalyst" placeholder="What is the key catalyst for price appreciation? New product, earnings beat, sector rotation..."></textarea>
+            </div>
+            <div class="field span-full">
+                <label>Additional Notes</label>
+                <textarea id="notes" placeholder="Entry strategy, target price, stop-loss, position sizing, any other observations..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <div class="footer">
+        <div class="footer-note">Generated by fetch_zulu.py &mdash; Zulu Pre-Trade System</div>
+        <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Mirror ticker into the header badge
+        const tickerInput = document.getElementById('ticker');
+        const headerBadge = document.getElementById('header-ticker');
+        function syncTicker() {
+            const v = tickerInput.value.trim();
+            headerBadge.textContent = v || '—';
+        }
+        tickerInput.addEventListener('input', syncTicker);
+        syncTicker();
+
+        // Tint any input that already has a value (i.e. auto-filled by the script)
+        document.querySelectorAll('input[type="text"]').forEach(function (inp) {
+            function applyStyle() {
+                if (inp.value && inp.value.trim() !== '') {
+                    inp.classList.add('auto-filled');
+                } else {
+                    inp.classList.remove('auto-filled');
+                }
+            }
+            applyStyle();
+            inp.addEventListener('input', applyStyle);
+        });
+
+        // Update page title with company name when available
+        const companyInput = document.getElementById('company-name');
+        function syncTitle() {
+            const t = tickerInput.value.trim();
+            const c = companyInput.value.trim();
+            document.title = t ? `${t} — Zulu Checklist` : 'Zulu Pre-Trade Checklist';
+        }
+        tickerInput.addEventListener('input', syncTitle);
+        companyInput.addEventListener('input', syncTitle);
+        syncTitle();
+    });
+</script>
+</body>
+</html>
