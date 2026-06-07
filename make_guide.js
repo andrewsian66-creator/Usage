@@ -226,11 +226,284 @@ function makeTAccount(title, drEntries, crEntries) {
   ];
 }
 
+// ─── 4.3 Trial Balance ─────────────────────────────────────────────────────────
+//
+// 3 columns: Account | Dr £ | Cr £
+// Widths:    6300    | 1950  | 1950  = 10200
+// Auto-calculates totals row from provided data.
+
+function makeTrialBalance(title, rows) {
+  const COL_W = [6300, 1950, 1950];
+
+  const makeCell = (text, { bold = false, rightAlign = false, width } = {}) =>
+    new TableCell({
+      borders: allThin(),
+      shading: noFill(),
+      margins: cellMargins(),
+      width:   { size: width, type: WidthType.DXA },
+      children: [new Paragraph({
+        alignment: rightAlign ? AlignmentType.RIGHT : AlignmentType.LEFT,
+        children:  [run(text, { bold })],
+      })],
+    });
+
+  const headerRow = new TableRow({
+    children: [
+      makeCell('Account', { bold: true, width: COL_W[0] }),
+      makeCell('Dr £',   { bold: true, rightAlign: true, width: COL_W[1] }),
+      makeCell('Cr £',   { bold: true, rightAlign: true, width: COL_W[2] }),
+    ],
+  });
+
+  const dataRows = rows.map(({ account, dr, cr }) =>
+    new TableRow({
+      children: [
+        makeCell(account ?? '', { width: COL_W[0] }),
+        makeCell(dr ?? '',      { rightAlign: true, width: COL_W[1] }),
+        makeCell(cr ?? '',      { rightAlign: true, width: COL_W[2] }),
+      ],
+    }),
+  );
+
+  const sumSide = key => rows.reduce((s, r) => {
+    const n = parseFloat((r[key] ?? '0').replace(/[^\d.]/g, ''));
+    return s + (isNaN(n) ? 0 : n);
+  }, 0).toLocaleString('en-GB');
+
+  const totalRow = new TableRow({
+    children: [
+      makeCell('Total', { bold: true, width: COL_W[0] }),
+      makeCell(`£${sumSide('dr')}`, { bold: true, rightAlign: true, width: COL_W[1] }),
+      makeCell(`£${sumSide('cr')}`, { bold: true, rightAlign: true, width: COL_W[2] }),
+    ],
+  });
+
+  return [
+    boldPara(title),
+    new Table({
+      width:        { size: CONTENT_WIDTH, type: WidthType.DXA },
+      columnWidths: COL_W,
+      rows:         [headerRow, ...dataRows, totalRow],
+    }),
+    bodyPara([run('')]),
+  ];
+}
+
+// ─── 4.4 Cash Book Extract ─────────────────────────────────────────────────────
+//
+// 3 columns: Date | Customer/Supplier | £
+// Widths:    1530 | 6120              | 2550  = 10200
+// col2Label: 'Customer' for receipts, 'Supplier' for payments.
+// Auto-calculates and shows total row.
+
+function makeCashBookExtract(title, rows, { col2Label = 'Customer' } = {}) {
+  const COL_W = [1530, 6120, 2550];
+
+  const makeCell = (text, { bold = false, rightAlign = false, width } = {}) =>
+    new TableCell({
+      borders: allThin(),
+      shading: noFill(),
+      margins: cellMargins(),
+      width:   { size: width, type: WidthType.DXA },
+      children: [new Paragraph({
+        alignment: rightAlign ? AlignmentType.RIGHT : AlignmentType.LEFT,
+        children:  [run(text, { bold })],
+      })],
+    });
+
+  const headerRow = new TableRow({
+    children: [
+      makeCell('Date',      { bold: true, width: COL_W[0] }),
+      makeCell(col2Label,   { bold: true, width: COL_W[1] }),
+      makeCell('£',    { bold: true, rightAlign: true, width: COL_W[2] }),
+    ],
+  });
+
+  const dataRows = rows.map(({ date, name, amount }) =>
+    new TableRow({
+      children: [
+        makeCell(date   ?? '', { width: COL_W[0] }),
+        makeCell(name   ?? '', { width: COL_W[1] }),
+        makeCell(amount ?? '', { rightAlign: true, width: COL_W[2] }),
+      ],
+    }),
+  );
+
+  const total = rows.reduce((s, r) => {
+    const n = parseFloat((r.amount ?? '0').replace(/[^\d.]/g, ''));
+    return s + (isNaN(n) ? 0 : n);
+  }, 0).toLocaleString('en-GB');
+
+  const totalRow = new TableRow({
+    children: [
+      makeCell('Total', { bold: true, width: COL_W[0] }),
+      makeCell('',      { width: COL_W[1] }),
+      makeCell(`£${total}`, { bold: true, rightAlign: true, width: COL_W[2] }),
+    ],
+  });
+
+  return [
+    boldPara(title),
+    new Table({
+      width:        { size: CONTENT_WIDTH, type: WidthType.DXA },
+      columnWidths: COL_W,
+      rows:         [headerRow, ...dataRows, totalRow],
+    }),
+    bodyPara([run('')]),
+  ];
+}
+
+// ─── 4.5 Transaction Summary Table ─────────────────────────────────────────────
+//
+// 3 columns: Transaction | Source | £
+// Widths:    7140        | 1530   | 1530  = 10200
+// Header row bold; no auto-total.
+
+function makeTransactionSummary(title, rows) {
+  const COL_W = [7140, 1530, 1530];
+
+  const makeCell = (text, { bold = false, rightAlign = false, width } = {}) =>
+    new TableCell({
+      borders: allThin(),
+      shading: noFill(),
+      margins: cellMargins(),
+      width:   { size: width, type: WidthType.DXA },
+      children: [new Paragraph({
+        alignment: rightAlign ? AlignmentType.RIGHT : AlignmentType.LEFT,
+        children:  [run(text, { bold })],
+      })],
+    });
+
+  const headerRow = new TableRow({
+    children: [
+      makeCell('Transaction', { bold: true, width: COL_W[0] }),
+      makeCell('Source',      { bold: true, width: COL_W[1] }),
+      makeCell('£',      { bold: true, rightAlign: true, width: COL_W[2] }),
+    ],
+  });
+
+  const dataRows = rows.map(({ transaction, source, amount }) =>
+    new TableRow({
+      children: [
+        makeCell(transaction ?? '', { width: COL_W[0] }),
+        makeCell(source      ?? '', { width: COL_W[1] }),
+        makeCell(amount      ?? '', { rightAlign: true, width: COL_W[2] }),
+      ],
+    }),
+  );
+
+  return [
+    boldPara(title),
+    new Table({
+      width:        { size: CONTENT_WIDTH, type: WidthType.DXA },
+      columnWidths: COL_W,
+      rows:         [headerRow, ...dataRows],
+    }),
+    bodyPara([run('')]),
+  ];
+}
+
+// ─── 4.6 Note Box (Callout) ────────────────────────────────────────────────────
+//
+// Single-cell table, full content width.
+// Left border only (size 8); no other borders; no fill.
+// Cell margins: top 60, bottom 60, left 200, right 60.
+// Contents: bold title paragraph + body paragraph.
+
+function makeNoteBox(titleText, bodyText) {
+  const leftOnlyBorders = {
+    top:    bNone(),
+    bottom: bNone(),
+    left:   bSingle8(),
+    right:  bNone(),
+  };
+
+  const cell = new TableCell({
+    borders: leftOnlyBorders,
+    shading: noFill(),
+    margins: { top: 60, bottom: 60, left: 200, right: 60 },
+    width:   { size: CONTENT_WIDTH, type: WidthType.DXA },
+    children: [
+      new Paragraph({ spacing: { after: 60 },  children: [run(titleText, { bold: true })] }),
+      new Paragraph({ spacing: { after: 0 },   children: [run(bodyText)] }),
+    ],
+  });
+
+  return [
+    bodyPara([run('')]), // space before
+    new Table({
+      width:        { size: CONTENT_WIDTH, type: WidthType.DXA },
+      columnWidths: [CONTENT_WIDTH],
+      rows:         [new TableRow({ children: [cell] })],
+    }),
+    bodyPara([run('')]), // space after
+  ];
+}
+
+// ─── 4.7 Reconciliation Table ──────────────────────────────────────────────────
+//
+// 4 columns: Track1 label | Track1 £ | Track2 label | Track2 £
+// Widths:    4050         | 1050     | 4050         | 1050  = 10200
+// Header row bold; last data row bold (agreed/corrected row).
+// Amount columns right-aligned.
+
+function makeReconciliationTable(title, rows) {
+  const COL_W = [4050, 1050, 4050, 1050];
+
+  const makeCell = (text, { bold = false, rightAlign = false, width } = {}) =>
+    new TableCell({
+      borders: allThin(),
+      shading: noFill(),
+      margins: cellMargins(),
+      width:   { size: width, type: WidthType.DXA },
+      children: [new Paragraph({
+        alignment: rightAlign ? AlignmentType.RIGHT : AlignmentType.LEFT,
+        children:  [run(text, { bold })],
+      })],
+    });
+
+  const headerRow = new TableRow({
+    children: [
+      makeCell(rows[0]?.header1 ?? 'Track 1', { bold: true, width: COL_W[0] }),
+      makeCell('£',                        { bold: true, rightAlign: true, width: COL_W[1] }),
+      makeCell(rows[0]?.header2 ?? 'Track 2',  { bold: true, width: COL_W[2] }),
+      makeCell('£',                        { bold: true, rightAlign: true, width: COL_W[3] }),
+    ],
+  });
+
+  const dataRows = rows.map(({ label1, amount1, label2, amount2 }, i) => {
+    const isLast = i === rows.length - 1;
+    return new TableRow({
+      children: [
+        makeCell(label1  ?? '', { bold: isLast, width: COL_W[0] }),
+        makeCell(amount1 ?? '', { bold: isLast, rightAlign: true, width: COL_W[1] }),
+        makeCell(label2  ?? '', { bold: isLast, width: COL_W[2] }),
+        makeCell(amount2 ?? '', { bold: isLast, rightAlign: true, width: COL_W[3] }),
+      ],
+    });
+  });
+
+  return [
+    boldPara(title),
+    new Table({
+      width:        { size: CONTENT_WIDTH, type: WidthType.DXA },
+      columnWidths: COL_W,
+      rows:         [headerRow, ...dataRows],
+    }),
+    bodyPara([run('')]),
+  ];
+}
+
 // ─── Exports ───────────────────────────────────────────────────────────────────
 
 module.exports = {
   makeDayBookTable,
   makeTAccount,
+  makeTrialBalance,
+  makeCashBookExtract,
+  makeTransactionSummary,
+  makeNoteBox,
+  makeReconciliationTable,
   // shared helpers (available for later content sections)
   run,
   bodyPara,
