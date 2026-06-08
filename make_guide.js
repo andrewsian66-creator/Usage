@@ -364,8 +364,223 @@ function tAccount({ title, drRows, crRows }) {
   return [centredBoldTitle(title), table, body('')];
 }
 
+// ---- 4.3 Trial Balance ----------------------------------------------------
+// 3 cols: Account | Dr £ | Cr £
+// Widths: 6300 | 1950 | 1950 = 10200. Thin borders. Header bold.
+// Auto-calculates totals row from rows. Amount cols right-aligned.
+// rows: [{ account, dr?, cr? }, ...]  — pass either dr or cr per row.
+function trialBalance({ title, rows }) {
+  const W = [6300, 1950, 1950];
+
+  const header = new TableRow({
+    tableHeader: true,
+    children: [
+      gridCell({ width: W[0], children: 'Account', bold: true }),
+      gridCell({ width: W[1], children: 'Dr £',    bold: true, align: AlignmentType.RIGHT }),
+      gridCell({ width: W[2], children: 'Cr £',    bold: true, align: AlignmentType.RIGHT }),
+    ],
+  });
+
+  const num = v => Number(String(v ?? '').replace(/[^0-9.-]/g, '')) || 0;
+
+  const dataRows = rows.map(r => new TableRow({
+    children: [
+      gridCell({ width: W[0], children: r.account }),
+      gridCell({ width: W[1], children: r.dr != null && r.dr !== '' ? fmt(r.dr) : '', align: AlignmentType.RIGHT }),
+      gridCell({ width: W[2], children: r.cr != null && r.cr !== '' ? fmt(r.cr) : '', align: AlignmentType.RIGHT }),
+    ],
+  }));
+
+  const drTotal = rows.reduce((s, r) => s + num(r.dr), 0);
+  const crTotal = rows.reduce((s, r) => s + num(r.cr), 0);
+
+  const totalRow = new TableRow({
+    children: [
+      gridCell({ width: W[0], children: 'Total',    bold: true }),
+      gridCell({ width: W[1], children: fmt(drTotal), bold: true, align: AlignmentType.RIGHT }),
+      gridCell({ width: W[2], children: fmt(crTotal), bold: true, align: AlignmentType.RIGHT }),
+    ],
+  });
+
+  const table = new Table({
+    width: { size: CONTENT_WIDTH, type: WidthType.DXA },
+    columnWidths: W,
+    rows: [header, ...dataRows, totalRow],
+  });
+
+  return [boldTitle(title), table, body('')];
+}
+
+// ---- 4.4 Cash Book Extract ------------------------------------------------
+// 3 cols: Date | Customer/Supplier | £
+// Widths: 1530 | 6120 | 2550 = 10200. Thin borders. Header bold.
+// mode: 'receipts' => column 2 header "Customer"; 'payments' => "Supplier".
+// Auto-totals.
+function cashBookExtract({ title, mode = 'receipts', rows }) {
+  const W = [1530, 6120, 2550];
+  const partyLabel = mode === 'payments' ? 'Supplier' : 'Customer';
+
+  const header = new TableRow({
+    tableHeader: true,
+    children: [
+      gridCell({ width: W[0], children: 'Date',     bold: true }),
+      gridCell({ width: W[1], children: partyLabel, bold: true }),
+      gridCell({ width: W[2], children: POUND,      bold: true, align: AlignmentType.RIGHT }),
+    ],
+  });
+
+  const dataRows = rows.map(r => new TableRow({
+    children: [
+      gridCell({ width: W[0], children: r.date }),
+      gridCell({ width: W[1], children: r.name }),
+      gridCell({ width: W[2], children: fmt(r.amount), align: AlignmentType.RIGHT }),
+    ],
+  }));
+
+  const total = rows.reduce((s, r) => s + Number(String(r.amount).replace(/[^0-9.-]/g, '')), 0);
+
+  const totalRow = new TableRow({
+    children: [
+      gridCell({ width: W[0], children: 'Total',  bold: true }),
+      gridCell({ width: W[1], children: '' }),
+      gridCell({ width: W[2], children: fmt(total), bold: true, align: AlignmentType.RIGHT }),
+    ],
+  });
+
+  const table = new Table({
+    width: { size: CONTENT_WIDTH, type: WidthType.DXA },
+    columnWidths: W,
+    rows: [header, ...dataRows, totalRow],
+  });
+
+  return [boldTitle(title), table, body('')];
+}
+
+// ---- 4.5 Transaction Summary Table ----------------------------------------
+// 3 cols: Transaction | Source | £
+// Widths: 7140 | 1530 | 1530 = 10200. Thin borders. Header bold. No total row.
+function transactionSummary({ title, rows }) {
+  const W = [7140, 1530, 1530];
+
+  const header = new TableRow({
+    tableHeader: true,
+    children: [
+      gridCell({ width: W[0], children: 'Transaction', bold: true }),
+      gridCell({ width: W[1], children: 'Source',      bold: true }),
+      gridCell({ width: W[2], children: POUND,         bold: true, align: AlignmentType.RIGHT }),
+    ],
+  });
+
+  const dataRows = rows.map(r => new TableRow({
+    children: [
+      gridCell({ width: W[0], children: r.transaction }),
+      gridCell({ width: W[1], children: r.source }),
+      gridCell({ width: W[2], children: fmt(r.amount), align: AlignmentType.RIGHT }),
+    ],
+  }));
+
+  const table = new Table({
+    width: { size: CONTENT_WIDTH, type: WidthType.DXA },
+    columnWidths: W,
+    rows: [header, ...dataRows],
+  });
+
+  const out = [table, body('')];
+  if (title) out.unshift(boldTitle(title));
+  return out;
+}
+
+// ---- 4.6 Note Box (Callout) -----------------------------------------------
+// Single-cell, full content width.
+// Left border only: single size 8. No fill, no other borders.
+// Internal margins: top 60, bottom 60, left 200, right 60.
+// Contents: bold title paragraph + body paragraph.
+// Surrounded by blank spacing paragraphs.
+function noteBox({ title, content }) {
+  const noteBorders = {
+    top:    BORDER_NONE,
+    bottom: BORDER_NONE,
+    left:   BORDER_CALLOUT_LEFT,
+    right:  BORDER_NONE,
+  };
+
+  const cell = new TableCell({
+    width: { size: CONTENT_WIDTH, type: WidthType.DXA },
+    margins: { top: 60, bottom: 60, left: 200, right: 60 },
+    borders: noteBorders,
+    children: [
+      new Paragraph({
+        spacing: { after: 60 },
+        children: [run(title, { bold: true })],
+      }),
+      new Paragraph({
+        children: [run(content)],
+      }),
+    ],
+  });
+
+  const table = new Table({
+    width: { size: CONTENT_WIDTH, type: WidthType.DXA },
+    columnWidths: [CONTENT_WIDTH],
+    borders: {
+      top:               BORDER_NONE,
+      bottom:            BORDER_NONE,
+      left:              BORDER_NONE,
+      right:             BORDER_NONE,
+      insideHorizontal:  BORDER_NONE,
+      insideVertical:    BORDER_NONE,
+    },
+    rows: [new TableRow({ children: [cell] })],
+  });
+
+  return [body(''), table, body('')];
+}
+
+// ---- 4.7 Reconciliation Table ---------------------------------------------
+// 4 cols: Track 1 label | Track 1 £ | Track 2 label | Track 2 £
+// Widths: 4050 | 1050 | 4050 | 1050 = 10200. Thin borders. Header bold.
+// Last data row: bold (the "agreed/corrected" row). Amount cols right-aligned.
+// headers = [track1Header, track2Header]
+// rows: [{ l1, l1Amount, l2, l2Amount }, ...]
+function reconciliationTable({ title, headers, rows }) {
+  const W = [4050, 1050, 4050, 1050];
+
+  const header = new TableRow({
+    tableHeader: true,
+    children: [
+      gridCell({ width: W[0], children: headers[0], bold: true }),
+      gridCell({ width: W[1], children: POUND,      bold: true, align: AlignmentType.RIGHT }),
+      gridCell({ width: W[2], children: headers[1], bold: true }),
+      gridCell({ width: W[3], children: POUND,      bold: true, align: AlignmentType.RIGHT }),
+    ],
+  });
+
+  const lastIdx = rows.length - 1;
+  const dataRows = rows.map((r, i) => {
+    const isLast = i === lastIdx;
+    return new TableRow({
+      children: [
+        gridCell({ width: W[0], children: r.l1 || '',       bold: isLast }),
+        gridCell({ width: W[1], children: r.l1Amount || '', bold: isLast, align: AlignmentType.RIGHT }),
+        gridCell({ width: W[2], children: r.l2 || '',       bold: isLast }),
+        gridCell({ width: W[3], children: r.l2Amount || '', bold: isLast, align: AlignmentType.RIGHT }),
+      ],
+    });
+  });
+
+  const table = new Table({
+    width: { size: CONTENT_WIDTH, type: WidthType.DXA },
+    columnWidths: W,
+    rows: [header, ...dataRows],
+  });
+
+  const out = [table, body('')];
+  if (title) out.unshift(boldTitle(title));
+  return out;
+}
+
 // ---------------------------------------------------------------------------
-// 5. SMOKE TEST — verify the two helpers render correctly.
+// 5. SMOKE TEST — verify all seven helpers render correctly.
 //    (Replaced with real Section 6 content in a later pass.)
 // ---------------------------------------------------------------------------
 
@@ -425,6 +640,63 @@ const children = [
     crRows: [
       { desc: '3 May  Balance c/d', amount: '180' },
       { isTotal: true, amount: '£180' },
+    ],
+  }),
+
+  // §4.3 smoke test: Trial Balance (auto-totalled)
+  ...trialBalance({
+    title: 'Summarised Trial Balance — 7 May 2026',
+    rows: [
+      { account: 'A. Brown',  dr: 650, cr: '' },
+      { account: 'C. Davies', dr: 180, cr: '' },
+      { account: 'Sales',     dr: '',  cr: 830 },
+    ],
+  }),
+
+  // §4.4 smoke test: Cash Book Extract — receipts (default) and payments
+  ...cashBookExtract({
+    title: 'Cash Book (Bank Account) — Receipts',
+    mode: 'receipts',
+    rows: [
+      { date: '10 May', name: 'A. Brown',  amount: 400 },
+      { date: '12 May', name: 'C. Davies', amount: 180 },
+    ],
+  }),
+  ...cashBookExtract({
+    title: 'Cash Book (Bank Account) — Payments',
+    mode: 'payments',
+    rows: [
+      { date: '14 May', name: 'T. Mills Ltd',   amount: 600 },
+      { date: '16 May', name: 'B. Rogers & Co', amount: 200 },
+    ],
+  }),
+
+  // §4.5 smoke test: Transaction Summary
+  ...transactionSummary({
+    title: 'Transaction summary',
+    rows: [
+      { transaction: 'Credit sales for the quarter',        source: 'Sales Day Book',  amount: 3600 },
+      { transaction: 'Sales returns (credit notes issued)', source: 'Returns Journal', amount: 280 },
+      { transaction: 'Irrecoverable debt written off',      source: 'General Journal', amount: 150 },
+      { transaction: 'Bank receipts from credit customers', source: 'Cash Book',       amount: 1800 },
+    ],
+  }),
+
+  // §4.6 smoke test: Note Box
+  ...noteBox({
+    title: 'Key Principle',
+    content: 'The Receivables Ledger must be updated every time an entry is made in the Sales Ledger Control Account. The SLCA balance and the total of the individual Receivables Ledger balances must always agree.',
+  }),
+
+  // §4.7 smoke test: Reconciliation Table (last row bold)
+  ...reconciliationTable({
+    title: 'Error reconciliation',
+    headers: ['Track 1 — SLCA', 'Track 2 — Individual Accounts'],
+    rows: [
+      { l1: 'Original balance',                 l1Amount: '5,200', l2: 'Original total',                              l2Amount: '5,080' },
+      { l1: 'Less: Error 1 (over-cast SDB)',    l1Amount: '−60',   l2: 'Add: Error 2 (omission — D. Hughes)',          l2Amount: '+100' },
+      { l1: '',                                 l1Amount: '',      l2: 'Less: Error 3 (under-posted receipt — K. Osei)', l2Amount: '−40' },
+      { l1: 'Corrected SLCA balance',           l1Amount: '£5,140', l2: 'Corrected individual accounts total',         l2Amount: '£5,140' },
     ],
   }),
 ];
